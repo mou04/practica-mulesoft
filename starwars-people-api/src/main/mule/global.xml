@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:request-config name="HTTP_Request_swapi" doc:name="HTTP Request configuration" doc:id="501a6c9d-f4a0-42d0-9f8f-8688d246ec13" >
+		<http:request-connection protocol="HTTPS" host="${backend.swapi.hostname}" >
+			<tls:context >
+				<tls:key-store type="jks" path="KeyStore.jks" keyPassword="swapipractica" password="swapipractica" />
+			</tls:context>
+		</http:request-connection>
+	</http:request-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="7a0e0c05-ebad-4932-96f7-97cfede7b6ad" file="${mule.env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="3a4cb907-cc4d-4864-96ad-19079d1e9df1" name="mule.env" value="dev" />
+	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="e1fb9438-935a-4b16-9021-4e3712dbeeb6" flowRef="starwars-people-api-main" />
+	<error-handler name="globalError_Handler" doc:id="162371ec-832b-4a59-9380-0301c3a48358" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="fe8f4d1f-2b74-4767-a2bb-70df9a7bfe99" type="HTTP:UNAUTHORIZED" >
+			<logger level="INFO" doc:name="Logger" doc:id="ea054db7-db2b-42df-97f0-c8aecacc6800" message="#[error]" />
+			<ee:transform doc:name="Transform Message" doc:id="ac1ff7d1-7527-46c1-8c3d-9ddd56919d66" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Unauthorized."
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[401]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8efdb5a1-7403-4a07-8044-c814ff51f8a2" type="HTTP:NOT_FOUND" >
+			<logger level="INFO" doc:name="Logger" doc:id="b0baf5cf-2a03-4c6e-9ded-ddf822b9aef5" message="#[error]" />
+			<ee:transform doc:name="Transform Message" doc:id="1c429612-f05d-4bab-a4c9-9ea29caafedb" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Not found."
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d47d410f-fdf1-43a0-82f5-1ca123786c57" type="HTTP:SERVICE_UNAVAILABLE" >
+			<logger level="INFO" doc:name="Logger" doc:id="d0e894f2-1638-4f1e-915b-c8fc6f477e22" message="#[error]" />
+			<ee:transform doc:name="Transform Message" doc:id="2c0063aa-b9ee-4315-912a-926c2e74ef78" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Service unavailable."
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[503]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="789d4d61-51a4-4d42-bfff-e40464c5d1d3" type="HTTP:INTERNAL_SERVER_ERROR, HTTP:CONNECTIVITY" >
+			<logger level="INFO" doc:name="Logger" doc:id="72534368-5ac9-4a3a-8f57-d8f9d478d98d" message="#[error]" />
+			<ee:transform doc:name="Transform Message" doc:id="5c1eb09e-ff89-403c-b55e-150dcc324d1e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Internal server error."
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="046b5713-02bf-444a-9d9f-6b9f4b0e3153" type="HTTP:BAD_REQUEST" >
+			<logger level="INFO" doc:name="Logger" doc:id="974defd3-510b-4625-903b-85c7dd3f73ef" message="#[error]" />
+			<ee:transform doc:name="Transform Message" doc:id="f47be7dc-93d1-460f-ba63-5f3cf6f4118a" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Bad request." 
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[400]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+	
+
+</mule>

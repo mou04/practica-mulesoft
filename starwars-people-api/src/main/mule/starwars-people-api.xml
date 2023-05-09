@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <http:listener-config name="starwars-people-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="starwars-people-api-config" api="resource::3ae16d5a-6e6c-4ea3-bea2-1e2f27a21c16:starwars-people-api:1.0.0:raml:zip:starwars-people-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="starwars-people-api-main">
+        <http:listener config-ref="starwars-people-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="starwars-people-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="starwars-people-api-console">
+        <http:listener config-ref="starwars-people-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="starwars-people-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform>
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\people:starwars-people-api-config">
+        <set-variable value="#[attributes.queryParams.gender]" doc:name="Gender" doc:id="6354a63a-eacd-40b2-b80b-388b3d9386cb" variableName="gender" />
+		<http:request method="GET" doc:name="Get charcaters" doc:id="5b013f07-1127-443c-815d-cba38cf54937" config-ref="HTTP_Request_swapi" path="${backend.swapi.endpoints.people}">
+		</http:request>
+		<choice doc:name="Choice" doc:id="cc6b0d2f-14a3-4f88-ab98-aada2fb1282d">
+			<when expression="#[!isEmpty(vars.gender)]">
+				<ee:transform doc:name="Response message" doc:id="7b70932a-666b-44ee-8a1a-80317189bfe7">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/csv
+---
+payload.results map {
+	name: $.name,
+	height: $.height,
+	mass: $.mass,
+	hairColor: $.hair_color,
+	skinColor: $.skin_color,
+	eyeColor: $.eye_color,
+	birthYear: $.birth_year,
+	gender: $.gender
+	
+} filter ((value, index) -> value.gender == vars.gender)]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="httpStatus"><![CDATA[200]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<set-variable value="#[payload.results]" doc:name="All results" doc:id="da84b0c2-f692-4851-b2b9-3d7b33ca89d5" variableName="allResults" />
+				<set-variable value="#[payload.next]" doc:name="Next page" doc:id="16a4ca38-44b9-4861-929e-fade457f1c1e" variableName="nextPage" />
+				<flow-ref doc:name="All characters" doc:id="5d4ff1c7-a2e9-4f79-8f6d-a4e1a97bfaa8" name="allCharacters"/>
+			</otherwise>
+		</choice>
+    </flow>
+	<sub-flow name="allCharacters" doc:id="97a24673-a4c2-4a0e-aa74-76c533a5a922" >
+		<choice doc:name="Choice" doc:id="da6f8478-bfee-4d2d-86cf-b9574d8a220e" >
+			<when expression="#[vars.nextPage != null]">
+				<set-variable value="#[(vars.nextPage splitBy(/[=\/]/))[6]]" doc:name="Page" doc:id="23a877dc-a06e-4cee-b532-2592cb275a68" variableName="page" />
+				<http:request method="GET" doc:name="Get charcaters" doc:id="77a9e120-d621-4188-8723-f1f6fa2363c1" config-ref="HTTP_Request_swapi" path="${backend.swapi.endpoints.people}" >
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"page" : vars.page
+}]]]></http:query-params>
+				</http:request>
+				<set-variable value="#[payload.next]" doc:name="Next page" doc:id="c501036c-fea5-4d4d-b446-a5c8d4f69d6e" variableName="nextPage"/>
+				<set-variable value="#[vars.allResults ++ payload.results]" doc:name="All results" doc:id="5ee018d6-af6f-4ee6-ac53-37583526635a" variableName="allResults"/>
+				<flow-ref doc:name="All characters" doc:id="74d01538-57a6-454e-8793-ea9b315b90c9" name="allCharacters"/>
+			</when>
+			<otherwise >
+				<set-payload value="#[vars.allResults]" doc:name="All results payload" doc:id="c2f632c4-9263-4d13-940e-207f24151710" />
+				<ee:transform doc:name="Response message" doc:id="5d02f278-68cd-4cba-a77a-667c856f81a4" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+payload map {
+	name: $.name,
+	height: $.height,
+	mass: $.mass,
+	hairColor: $.hair_color,
+	skinColor: $.skin_color,
+	eyeColor: $.eye_color,
+	birthYear: $.birth_year,
+	gender: $.gender
+	
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>

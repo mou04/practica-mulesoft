@@ -1,0 +1,103 @@
+#%RAML 1.0
+title: starwars-people-api
+version: 1.0.0
+description: API to see the information of the characters of the starwars movies.
+baseUri: https://starwars-people-api/api/v1
+
+mediaType: 
+- application/json
+
+protocols:
+  - HTTPS
+
+uses:
+  parameters: data-types/parameters-library.raml
+
+types:
+  people: !include data-types/people-data-type.raml
+  error-response: !include data-types/error-responses-data-type.raml
+
+/people:
+  
+  get:
+    displayName: Get characters information
+    description: Get characters information of the starwars movies.
+    responses:
+      200:
+        description: Successfully requested.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json
+        body:
+          application/json:
+            type: people
+            example: !include examples/people-response.raml
+      400:
+        description: Bad request.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json  
+        body:
+          application/json:
+            type: error-response
+            example: !include examples/error-responses/error-400-example.raml
+      401:
+        description: Authentication error.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json  
+        body:
+          application/json:
+            type: error-response
+            example: !include examples/error-responses/error-404-example.raml
+      404:
+        description: Requested information not found.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json  
+        body:
+          application/json:
+            type: error-response
+            example: !include examples/error-responses/error-404-example.raml           
+      429:
+        description: Request limit exceeded.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json  
+        body:
+          application/json:
+            type: error-response
+            example: !include examples/error-responses/error-429-example.raml
+      500:
+        description: API server error.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json  
+        body:
+          application/json:
+            type: error-response
+            example: !include examples/error-responses/error-500-example.raml
+      503:
+        description: API service error.
+        headers:
+          Content-Type: 
+            description: Content-Type
+            type: parameters.content-type
+            example: application/json  
+        body:
+          application/json:
+            type: error-response
+            example: !include examples/error-responses/error-503-example.raml
+    

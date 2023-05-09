@@ -1,0 +1,9 @@
+api:
+  id: "0"
+  
+backend:
+  swapi:
+    hostname: "swapi.dev"
+    endpoints:
+      people: "/api/people"
+      

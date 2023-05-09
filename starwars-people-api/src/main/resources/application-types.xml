@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="people-example" format="json">
+      <types:shape format="weave" example="examples/people-example.json"><![CDATA[%dw 2.0
+
+type people_example = {|
+  count: Number {"typeId": "int"}, 
+  next: String, 
+  previous: Null, 
+  results: Array<{|    name: String,     height: String,     mass: String,     hair_color: String,     skin_color: String,     eye_color: String,     birth_year: String,     gender: String,     homeworld: String,     films: Array<String>, 
+    species: Array<Any>, 
+    vehicles: Array<String>, 
+    starships: Array<String>, 
+    created: String, 
+    edited: String, 
+    url: String
+  |}>
+|} {"example": "{\\\"count\\\":82,\\\"next\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/?page=2\\\",\\\"previous\\\":null,\\\"results\\\":[{\\\"name\\\":\\\"Luke Skywalker\\\",\\\"height\\\":\\\"172\\\",\\\"mass\\\":\\\"77\\\",\\\"hair_color\\\":\\\"blond\\\",\\\"skin_color\\\":\\\"fair\\\",\\\"eye_color\\\":\\\"blue\\\",\\\"birth_year\\\":\\\"19BBY\\\",\\\"gender\\\":\\\"male\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/2\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/3\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/vehicles\\/14\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/vehicles\\/30\\/\\\"],\\\"starships\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/12\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/22\\/\\\"],\\\"created\\\":\\\"2014-12-09T13:50:51.644000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:56.891000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/1\\/\\\"},{\\\"name\\\":\\\"C-3PO\\\",\\\"height\\\":\\\"167\\\",\\\"mass\\\":\\\"75\\\",\\\"hair_color\\\":\\\"n\\/a\\\",\\\"skin_color\\\":\\\"gold\\\",\\\"eye_color\\\":\\\"yellow\\\",\\\"birth_year\\\":\\\"112BBY\\\",\\\"gender\\\":\\\"n\\/a\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/2\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/3\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/4\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/5\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/species\\/2\\/\\\"],\\\"vehicles\\\":[],\\\"starships\\\":[],\\\"created\\\":\\\"2014-12-10T15:10:51.357000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.309000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/2\\/\\\"},{\\\"name\\\":\\\"R2-D2\\\",\\\"height\\\":\\\"96\\\",\\\"mass\\\":\\\"32\\\",\\\"hair_color\\\":\\\"n\\/a\\\",\\\"skin_color\\\":\\\"white, blue\\\",\\\"eye_color\\\":\\\"red\\\",\\\"birth_year\\\":\\\"33BBY\\\",\\\"gender\\\":\\\"n\\/a\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/8\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/2\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/3\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/4\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/5\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/species\\/2\\/\\\"],\\\"vehicles\\\":[],\\\"starships\\\":[],\\\"created\\\":\\\"2014-12-10T15:11:50.376000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.311000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/3\\/\\\"},{\\\"name\\\":\\\"Darth Vader\\\",\\\"height\\\":\\\"202\\\",\\\"mass\\\":\\\"136\\\",\\\"hair_color\\\":\\\"none\\\",\\\"skin_color\\\":\\\"white\\\",\\\"eye_color\\\":\\\"yellow\\\",\\\"birth_year\\\":\\\"41.9BBY\\\",\\\"gender\\\":\\\"male\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/2\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/3\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[],\\\"starships\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/13\\/\\\"],\\\"created\\\":\\\"2014-12-10T15:18:20.704000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.313000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/4\\/\\\"},{\\\"name\\\":\\\"Leia Organa\\\",\\\"height\\\":\\\"150\\\",\\\"mass\\\":\\\"49\\\",\\\"hair_color\\\":\\\"brown\\\",\\\"skin_color\\\":\\\"light\\\",\\\"eye_color\\\":\\\"brown\\\",\\\"birth_year\\\":\\\"19BBY\\\",\\\"gender\\\":\\\"female\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/2\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/2\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/3\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/vehicles\\/30\\/\\\"],\\\"starships\\\":[],\\\"created\\\":\\\"2014-12-10T15:20:09.791000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.315000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/5\\/\\\"},{\\\"name\\\":\\\"Owen Lars\\\",\\\"height\\\":\\\"178\\\",\\\"mass\\\":\\\"120\\\",\\\"hair_color\\\":\\\"brown, grey\\\",\\\"skin_color\\\":\\\"light\\\",\\\"eye_color\\\":\\\"blue\\\",\\\"birth_year\\\":\\\"52BBY\\\",\\\"gender\\\":\\\"male\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/5\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[],\\\"starships\\\":[],\\\"created\\\":\\\"2014-12-10T15:52:14.024000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.317000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/6\\/\\\"},{\\\"name\\\":\\\"Beru Whitesun lars\\\",\\\"height\\\":\\\"165\\\",\\\"mass\\\":\\\"75\\\",\\\"hair_color\\\":\\\"brown\\\",\\\"skin_color\\\":\\\"light\\\",\\\"eye_color\\\":\\\"blue\\\",\\\"birth_year\\\":\\\"47BBY\\\",\\\"gender\\\":\\\"female\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/5\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[],\\\"starships\\\":[],\\\"created\\\":\\\"2014-12-10T15:53:41.121000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.319000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/7\\/\\\"},{\\\"name\\\":\\\"R5-D4\\\",\\\"height\\\":\\\"97\\\",\\\"mass\\\":\\\"32\\\",\\\"hair_color\\\":\\\"n\\/a\\\",\\\"skin_color\\\":\\\"white, red\\\",\\\"eye_color\\\":\\\"red\\\",\\\"birth_year\\\":\\\"unknown\\\",\\\"gender\\\":\\\"n\\/a\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\"],\\\"species\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/species\\/2\\/\\\"],\\\"vehicles\\\":[],\\\"starships\\\":[],\\\"created\\\":\\\"2014-12-10T15:57:50.959000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.321000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/8\\/\\\"},{\\\"name\\\":\\\"Biggs Darklighter\\\",\\\"height\\\":\\\"183\\\",\\\"mass\\\":\\\"84\\\",\\\"hair_color\\\":\\\"black\\\",\\\"skin_color\\\":\\\"light\\\",\\\"eye_color\\\":\\\"brown\\\",\\\"birth_year\\\":\\\"24BBY\\\",\\\"gender\\\":\\\"male\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/1\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[],\\\"starships\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/12\\/\\\"],\\\"created\\\":\\\"2014-12-10T15:59:50.509000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.323000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/9\\/\\\"},{\\\"name\\\":\\\"Obi-Wan Kenobi\\\",\\\"height\\\":\\\"182\\\",\\\"mass\\\":\\\"77\\\",\\\"hair_color\\\":\\\"auburn, white\\\",\\\"skin_color\\\":\\\"fair\\\",\\\"eye_color\\\":\\\"blue-gray\\\",\\\"birth_year\\\":\\\"57BBY\\\",\\\"gender\\\":\\\"male\\\",\\\"homeworld\\\":\\\"https:\\/\\/swapi.dev\\/api\\/planets\\/20\\/\\\",\\\"films\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/films\\/1\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/2\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/3\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/4\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/5\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/films\\/6\\/\\\"],\\\"species\\\":[],\\\"vehicles\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/vehicles\\/38\\/\\\"],\\\"starships\\\":[\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/48\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/59\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/64\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/65\\/\\\",\\\"https:\\/\\/swapi.dev\\/api\\/starships\\/74\\/\\\"],\\\"created\\\":\\\"2014-12-10T16:16:29.192000Z\\\",\\\"edited\\\":\\\"2014-12-20T21:17:50.325000Z\\\",\\\"url\\\":\\\"https:\\/\\/swapi.dev\\/api\\/people\\/10\\/\\\"}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Payload" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Input-Payload.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Input_Payload = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Input-Attributes.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Input_Attributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeAlias": "HttpResponseAttributes",
+"typeId": "org.mule.extension.http.api.HttpResponseAttributes"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Variables-allResults" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Input-Variables-allResults.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Input_Variables_allResults = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Variables-nextPage" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Input-Variables-nextPage.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Input_Variables_nextPage = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Variables-page" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Input-Variables-page.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Input_Variables_page = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Payload" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Output-Payload.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Output_Payload = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Output-Attributes.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Output_Attributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeAlias": "HttpResponseAttributes",
+"typeId": "org.mule.extension.http.api.HttpResponseAttributes"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Variables-allResults" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Output-Variables-allResults.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Output_Variables_allResults = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Variables-nextPage" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Output-Variables-nextPage.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Output_Variables_nextPage = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Variables-page" format="java">
+      <types:shape format="weave" example="weave/autogenerated/97a24673-a4c2-4a0e-aa74-76c533a5a922/Output-Variables-page.wev" autogeneratedOrigin="74d01538-57a6-454e-8793-ea9b315b90c9"><![CDATA[%dw 2.0
+
+type auto_97a24673_a4c2_4a0e_aa74_76c533a5a922_Output_Variables_page = Null
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#cc0f8048-2d72-4bd3-9626-a8644613b091">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="people-example"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#97a24673-a4c2-4a0e-aa74-76c533a5a922">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Payload"/>
+          <types:attributes type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="allResults" type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Variables-allResults"/>
+          <types:variable name="nextPage" type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Variables-nextPage"/>
+          <types:variable name="page" type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Input-Variables-page"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Payload"/>
+          <types:attributes type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="allResults" type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Variables-allResults"/>
+          <types:variable name="nextPage" type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Variables-nextPage"/>
+          <types:variable name="page" type="auto_97a24673-a4c2-4a0e-aa74-76c533a5a922_Output-Variables-page"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

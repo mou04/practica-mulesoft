@@ -1,0 +1,11 @@
+#%RAML 1.0 DataType
+
+description: Responses data model.
+type: object
+additionalProperties: false
+properties:
+  message:
+    displayName: message
+    description: Error message.
+    type: string
+    pattern: '^[A-Za-záéíóúÁÉÍÓÚ\.\,ñÑ\s]+$'

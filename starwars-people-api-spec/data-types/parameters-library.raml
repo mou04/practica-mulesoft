@@ -1,0 +1,19 @@
+#%RAML 1.0 Library
+
+usage: Parameters library
+
+types:
+  content-type:
+    displayName: Content-Type
+    description: Content-Type
+    type: string
+    pattern: '^[A-Za-z\-\.\,\_\/]+'          
+    enum:
+      - application/json
+    example: application/json
+
+  gender:
+    displayName: Gender
+    description: Character gender.
+    type: string
+    pattern: '^[A-Za-z]+'
